@@ -1,37 +1,32 @@
-//Page 1
 
 # List of Categories
-> http://localhost:9870/category
+> https://api-lens.herokuapp.com/category
 
 # List of Products
-> http://localhost:9870/products
+> https://api-lens.herokuapp.com/products
 
 # List of Available Size
-> http://localhost:9870/size
+> https://api-lens.herokuapp.com/size
 
 # Product wrt Category
-> http://localhost:9870/products?Category_Id=2
-
-//Page 2
+> https://api-lens.herokuapp.com/products?Category_Id=2
 
 # Products wrt Size
-> http://localhost:9870/products?Size_Id=3
+> https://api-lens.herokuapp.com/products?Size_Id=3
 
 # Products wrt Category & Size
-> http://localhost:9870/filter/4?Size_Id=3
+> https://api-lens.herokuapp.com/filter/4?Size_Id=3
 
 # Products wrt Category & Cost
->http://localhost:9870/filter/1?low=900&high=1200
+>https://api-lens.herokuapp.com/filter/1?low=900&high=1200
 
->http://localhost:9870/filter/2?low=600&high=3000&Size_Id=3
+>https://api-lens.herokuapp.com/filter/4?low=600&high=1000&Size_Id=3
 
 # Sort on basis of cost
-> http://localhost:9870/filter/3&sort=-1
-
-//Page 3
+> https://api-lens.herokuapp.com/filter/2?sort=-1
 
 # Details of Products
-> http://localhost:9870/details/9
+> https://api-lens.herokuapp.com/details/6
 
 # Get Products
 > (Post)localhost:9870/select
