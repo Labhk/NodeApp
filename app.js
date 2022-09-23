@@ -66,27 +66,41 @@ app.get(`/filter/:Category_Id`,(req,res)=>{
     let sort = {Price:1}
     let Category_Id = Number(req.params.Category_Id);
     let Size_Id = Number(req.query.Size_Id);
-    let low = Number(req.query.low);
-    let high = Number(req.query.high);
+    let Gid = Number(req.query.Gid);
+    let lcost = Number(req.query.lcost);
+    let hcost = Number(req.query.hcost);
     
     if(req.query.sort){
         sort={Price:req.query.sort}
     }
-    if(Size_Id && low && high){
+    if(Size_Id && lcost && hcost){
         query = {
             categories_id:Category_Id,
             size_id:Size_Id,
-            $and:[{Price:{$gt:low,$lt:high}}]
+            $and:[{Price:{$gt:lcost,$lt:hcost}}]
+        }
+    }
+    else if(Gid && lcost && hcost){
+        query = {
+            categories_id:Category_Id,
+            gid:Gid,
+            $and:[{Price:{$gt:lcost,$lt:hcost}}]
         }
     }
     else if(Size_Id){
         query = {
             categories_id:Category_Id,
             size_id:Size_Id}
-    }else if(low && high){
+    }
+    else if(Gid){
         query = {
             categories_id:Category_Id,
-            $and:[{Price:{$gt:low,$lt:high}}]
+            gid:Gid}
+    }
+    else if(lcost&&hcost){
+        query = {
+            categories_id:Category_Id,
+            $and:[{Price:{$gt:lcost,$lt:hcost}}]
         }
     }
     else{
@@ -110,15 +124,14 @@ app.get('/details/:id', (req, res) => {
 
 })
 
+
+
 app.post('/select',(req,res) => {
-    if(Array.isArray(req.body.id)){
-        db.collection('products').find({product_id:{$in:req.body.id}}).toArray((err,result) => {
-            if(err) throw err;
-            res.send(result)
-        })
-    }else{
-        res.send('Invalid Input')
-    }
+    console.log(req.body)
+    db.collection('products').find({product_id:{$in:req.body}}).toArray((err,result) => {
+        if(err) throw err;
+        res.send(result)
+    })
 })
 
 app.post('/placeOrder',(req,res) =>{
@@ -126,6 +139,43 @@ app.post('/placeOrder',(req,res) =>{
         if(err) throw err;
         res.send('Order Placed')
 
+    })
+})
+
+app.get('/orders',(req,res) => {
+    let email = req.query.email;
+    let query = {}
+    if(email){
+        query={email}
+    }
+    db.collection('orders').find(query).toArray((err,result) => {
+        if(err) throw err;
+        res.send(result)
+    })
+})
+
+app.patch('/update/:id',(req,res) => {
+    let oid = Number(req.params.id);
+    db.collection('orders').updateOne(
+        {order_id:oid},
+        {
+            $set:{
+                "status":req.body.status,
+                "bank_name":req.body.bank_name,
+                "date":req.body.date,
+            }
+        },(err,result) => {
+            if(err) throw err;
+            res.send('Order Updated')
+        }
+    )
+})
+
+app.delete('/deleteOrder/:id',(req,res) => {
+    let _id = mongo.ObjectId(req.params.id);
+    db.collection('orders').remove({_id},(err,result) => {
+        if(err) throw err;
+        res.send('Order Deleted')
     })
 })
 
